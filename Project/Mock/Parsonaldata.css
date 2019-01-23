@@ -1,0 +1,9 @@
+@charset "UTF-8";
+.center{
+	text-align:center;
+}
+div#header{
+	display:inline;
+	background-color:333;
+	text-align:right;
+}
