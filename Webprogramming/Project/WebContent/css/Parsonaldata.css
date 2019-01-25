@@ -13,3 +13,6 @@ div#header{
 	color:#ffffff;
 	text-align:right;
 }
+div#header span{
+	color:##ff0000;
+}

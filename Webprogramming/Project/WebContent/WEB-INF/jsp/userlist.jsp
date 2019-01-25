@@ -1,14 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
+<html lang="ja">
 <html>
 	<head>
 		<meta charset="UTF-8">
-	<link rel="stylesheet" href="Parsonaldata.css">
-	<link rel="stylesheet" href="userlist.css">
+	<link rel="stylesheet" href="css/Parsonaldata.css">
+	<link rel="stylesheet" href="css/userlist.css">
 	<title>ユーザ一覧</title>
 	</head>
 	<body>
 		<div id="header">
-			<p>ユーザ名さん　　<font color="#ff0000"><a href="./login.html">ログアウト</a></font></p>
+			<p>ユーザ名さん　　<span><a href="./login.html">ログアウト</a></span></p>
 		</div>
 		<h1 class="center">ユーザ一覧</h1>
 		<br>
