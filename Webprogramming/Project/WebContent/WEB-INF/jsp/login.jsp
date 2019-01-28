@@ -21,9 +21,9 @@
 	</c:if>
 		<br>
 		<form action="LoginServlet" method="post">
-			ログインID <input type="text" name="loginId"><br>
+			ログインID <input type="text" name="loginId"required><br>
 			<br>
-			パスワード <input type="text" name="password"><br>
+			パスワード <input type="text" name="password"required><br>
 			<br>
 			<input type="submit" value="ログイン">
 		</form>

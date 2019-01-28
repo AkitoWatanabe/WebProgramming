@@ -61,8 +61,8 @@ public class UserDao {
             conn = DBManager.getConnection();
 
             // SELECT文を準備
-            // TODO: 未実装：管理者以外を取得するようSQLを変更する
-            String sql = "SELECT * FROM user";
+            // 管理者以外を取得するようSQLを変更する
+            String sql = "SELECT * FROM user WHERE login_id != admin";
 
              // SELECTを実行し、結果表を取得
             Statement stmt = conn.createStatement();
@@ -97,5 +97,74 @@ public class UserDao {
             }
         }
         return userList;
+    }
+
+	public String findByLoginId(String loginId) {
+        Connection conn = null;
+        try {
+            // データベースへ接続
+            conn = DBManager.getConnection();
+
+            // SELECT文を準備
+            String sql = "SELECT * FROM user WHERE login_id = ?";
+
+             // SELECTを実行し、結果表を取得
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, loginId);
+            ResultSet rs = pStmt.executeQuery();
+
+             // 主キーに紐づくレコードは1件のみなので、rs.next()は1回だけ行う
+            if (!rs.next()) {
+                return null;
+            }
+
+            String loginIdData = rs.getString("login_id");
+            return loginIdData;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // データベース切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }
+    }
+
+	public void setSignup(String loginId,String userName,String password,Date birthday) {
+        Connection conn = null;
+        try {
+            // データベースへ接続
+            conn = DBManager.getConnection();
+
+            // SELECT文を準備
+            String sql = "INSERT INTO user(login_id,name,birth_date,password,create_date,update_date) VALUES (?,?,?,?,cast(now() as datetime),cast( now() as datetime ));";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, loginId);
+            pstmt.setString(2,userName);
+            pstmt.setDate(3, birthday);
+            pstmt.setString(4, password);
+            ResultSet rs = pstmt.executeQuery();
+
+        } catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		} finally {
+            // データベース切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

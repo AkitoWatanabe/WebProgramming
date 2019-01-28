@@ -60,4 +60,14 @@ table th{
 table td{
 	padding: 10px;
 }
+.button-detail{
+	display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    background: #819FF7;
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
 
+}

@@ -34,10 +34,16 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		// TODO 未実装：ログインセッションがある場合、ユーザ一覧画面にリダイレクトさせる
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-		dispatcher.forward(request, response);
+		// ログインセッションがある場合、ユーザ一覧画面にリダイレクトさせる
+		HttpSession session = request.getSession();
+		User checkSession = (User)session.getAttribute("userInfo");
+		if(checkSession == null) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+			dispatcher.forward(request, response);
+		}else {
+			response.sendRedirect("UserListServlet");
+		}
 	}
 
 	/**
@@ -55,15 +61,15 @@ public class LoginServlet extends HttpServlet {
 		UserDao userDao = new UserDao();
 		User user = userDao.findByLoginInfo(loginId, password);
 
-		if (user == null) {
-			// リクエストスコープにエラーメッセージをセット
-			request.setAttribute("errMsg", "ログインIDまたはパスワードが異なります");
+			if (user == null) {
+				// リクエストスコープにエラーメッセージをセット
+				request.setAttribute("errMsg", "ログインIDまたはパスワードが異なります");
 
-			// ログインjspにフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcher.forward(request, response);
-			return;
-		}
+				// ログインjspにフォワード
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 
 		/** テーブルに該当のデータが見つかった場合 **/
 		// セッションにユーザの情報をセット

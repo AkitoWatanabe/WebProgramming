@@ -16,3 +16,7 @@ div#header{
 div#header span{
 	color:##ff0000;
 }
+.alert{
+	color:#ffffff;
+	text-align:center
+}
