@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.UserDao;
+import model.Encryption;
 import model.User;
 
 /**
@@ -57,6 +58,9 @@ public class LoginServlet extends HttpServlet {
 
         String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
+		//入力されたパスワードの暗号化
+		Encryption encryption = new Encryption();
+		password = encryption.getEncryption(password);
 
 		UserDao userDao = new UserDao();
 		User user = userDao.findByLoginInfo(loginId, password);

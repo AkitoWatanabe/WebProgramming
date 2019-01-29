@@ -44,7 +44,7 @@
 					<!-- ログインボタンの表示制御を行う -->
 					<c:choose>
 
-						<c:when test="${adminCheck == temp}">
+						<c:when test="${userInfo.loginId == 'admin'}">
 							<td>
 								<input type="button" onclick="location.href='UserDetailServlet?id=${user.id}'"value="詳細">
 								<input type="button" onclick="location.href='UserUpdateServlet?id=${user.id}'"value="更新">

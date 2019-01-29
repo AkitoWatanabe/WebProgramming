@@ -11,20 +11,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.UserDao;
 import model.Encryption;
+import model.User;
 
 /**
- * Servlet implementation class SignupServlet
+ * Servlet implementation class UserUpdateServlet
  */
-@WebServlet("/SignupServlet")
-public class SignupServlet extends HttpServlet {
+@WebServlet("/UserUpdateServlet")
+public class UserUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SignupServlet() {
+    public UserUpdateServlet() {
         super();
         // TODO Auto-generated constructor stub
+
     }
 
 	/**
@@ -33,7 +35,20 @@ public class SignupServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp");
+		request.setCharacterEncoding("UTF-8");
+
+		int id =Integer.parseInt(request.getParameter("id"));
+
+		// ユーザ一覧情報を取得
+		UserDao userDao = new UserDao();
+
+		User user= userDao.findById(id);
+
+
+		// リクエストスコープにユーザ一覧情報をセット
+		request.setAttribute("userData", user);
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userupdate.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -44,40 +59,24 @@ public class SignupServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		request.setCharacterEncoding("UTF-8");
-
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 		String spellCheck = request.getParameter("spellCheck");
-		String userName = request.getParameter("userName");
+		String name = request.getParameter("username");
 		String birthday = request.getParameter("birthday");
-		//Date birthDate = Date.valueOf(birthday);
-
-		//ログインID被りチェック
 		UserDao userDao = new UserDao();
-		String user = userDao.findByLoginId(loginId);
 
-		if (user != null) {
-			// リクエストスコープにエラーメッセージをセット
-			request.setAttribute("errMsg", "入力されたログインIDは既に存在します");
-			//入力内容をリクエストスコープにセット
-			request.setAttribute("loginId", loginId);
-			request.setAttribute("userName", userName);
-			request.setAttribute("birthday", birthday);
 
-			// signupjspにフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp");
-			dispatcher.forward(request, response);
-			return;
-			}
 		//パスワード確認
 		if(!(password.equals(spellCheck))) {
 			request.setAttribute("errMsg", "パスワードをもう一度入力して下さい");
-			//入力内容をリクエストスコープにセット
-			request.setAttribute("loginId", loginId);
-			request.setAttribute("userName", userName);
-			request.setAttribute("birthday", birthday);
-			// signupjspにフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp");
+
+			User user= new User(loginId, name, birthday);
+
+			// リクエストスコープにユーザ一覧情報をセット
+			request.setAttribute("userData", user);
+			//updatejspにフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userupdate.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
@@ -85,7 +84,10 @@ public class SignupServlet extends HttpServlet {
 		Encryption encryption = new Encryption();
 		password = encryption.getEncryption(password);
 
-		userDao.setSignup(loginId,userName,password,birthday);
+		userDao.setSignup(loginId,name,password,birthday);
 		response.sendRedirect("UserListServlet");
+
+
 	}
+
 }

@@ -1,11 +1,12 @@
 package model;
 
+import java.util.Date;
 
 public class User {
 	private int id;
 	private String loginId;
 	private String name;
-	private String birthDate;
+	private Date birthDate;
 	private String password;
 	private String createDate;
 	private String updateDate;
@@ -15,7 +16,7 @@ public class User {
 		this.loginId = loginId;
 		this.name = name;
 	}
-	public User(int id, String loginId, String name, String birthDate, String password, String createDate,
+	public User(int id, String loginId, String name, Date birthDate, String password, String createDate,
 			String updateDate) {
 		this.id = id;
 		this.loginId = loginId;
@@ -26,7 +27,7 @@ public class User {
 		this.updateDate = updateDate;
 	}
 	//フォーム入力失敗時のデータ保持
-	public User(String loginId,String name,String birthDate) {
+	public User(String loginId,String name,Date birthDate) {
 		this.loginId = loginId;
 		this.name = name;
 		this.birthDate = birthDate;
@@ -49,10 +50,10 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getPassword() {

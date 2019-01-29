@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,22 +8,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import dao.UserDao;
 import model.User;
 
 /**
- * Servlet implementation class UserListServlet
+ * Servlet implementation class UserDetailServlet
  */
-@WebServlet("/UserListServlet")
-public class UserListServlet extends HttpServlet {
+@WebServlet("/UserDetailServlet")
+public class UserDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserListServlet() {
+    public UserDetailServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,24 +33,21 @@ public class UserListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		// ログインセッションがない場合、ログイン画面にリダイレクトさせる
-		HttpSession session = request.getSession();
-		User checkSession = (User)session.getAttribute("userInfo");
-		if(checkSession == null) {
-			response.sendRedirect("LoginServlet");
-		}else {
+		request.setCharacterEncoding("UTF-8");
 
-			// ユーザ一覧情報を取得
-			UserDao userDao = new UserDao();
-			List<User> userList = userDao.findAll();
+		int id =Integer.parseInt(request.getParameter("id"));
+
+		// ユーザ一覧情報を取得
+		UserDao userDao = new UserDao();
+
+		User user= userDao.findById(id);
 
 
-			// リクエストスコープにユーザ一覧情報をセット
-			request.setAttribute("userList", userList);
+		// リクエストスコープにユーザ一覧情報をセット
+		request.setAttribute("userData", user);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userlist.jsp");
-			dispatcher.forward(request, response);
-		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userdetail.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -61,12 +56,8 @@ public class UserListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
-		request.setCharacterEncoding("UTF-8");
 
-		String loginId = request.getParameter("loginId");
-		String userName = request.getParameter("userName");
-		String birthday1 = request.getParameter("birthday1");
-		String birthday2 = request.getParameter("birthday2");
+
 	}
 
 }

@@ -14,9 +14,9 @@ div#header{
 	text-align:right;
 }
 div#header span{
-	color:##ff0000;
+	color:#ff0000;
 }
 .alert{
-	color:#ffffff;
+	color:#ff0000;
 	text-align:center
 }
