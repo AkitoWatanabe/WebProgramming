@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.UserDao;
 import model.User;
@@ -33,21 +34,28 @@ public class UserDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		request.setCharacterEncoding("UTF-8");
+		// ログインセッションがない場合、ログイン画面にリダイレクトさせる
+		HttpSession session = request.getSession();
+		User checkSession = (User)session.getAttribute("userInfo");
+		if(checkSession == null) {
+			response.sendRedirect("LoginServlet");
+		}else {
+			request.setCharacterEncoding("UTF-8");
 
-		int id =Integer.parseInt(request.getParameter("id"));
+			int id =Integer.parseInt(request.getParameter("id"));
 
-		// ユーザ一覧情報を取得
-		UserDao userDao = new UserDao();
+			// ユーザ一覧情報を取得
+			UserDao userDao = new UserDao();
 
-		User user= userDao.findById(id);
+			User user= userDao.findById(id);
 
 
-		// リクエストスコープにユーザ一覧情報をセット
-		request.setAttribute("userData", user);
+			// リクエストスコープにユーザ一覧情報をセット
+			request.setAttribute("userData", user);
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userdetail.jsp");
-		dispatcher.forward(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userdetail.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 	/**

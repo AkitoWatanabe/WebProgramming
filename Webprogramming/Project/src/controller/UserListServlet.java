@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.StringJoiner;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -67,6 +68,49 @@ public class UserListServlet extends HttpServlet {
 		String userName = request.getParameter("userName");
 		String birthday1 = request.getParameter("birthday1");
 		String birthday2 = request.getParameter("birthday2");
+		System.out.println(loginId);
+		System.out.println(userName);
+		System.out.println(birthday1);
+		System.out.println(birthday2);
+		//すべて空の場合はすべて表示する
+		if(loginId.length()==0 && userName.length()==0 && birthday1.length()==0 && birthday2.length()==0) {
+			response.sendRedirect("UserListServlet");
+		}else {
+			//検索文字列の結合
+			StringJoiner joiner = new StringJoiner(" AND","SELECT * FROM user WHERE","AND login_id != 'admin';");
+			joiner.setEmptyValue("");
+			//ログインIDが入力
+			if(loginId.length()!=0) {
+				joiner.add(" login_id = \'" + loginId + "\'");
+			}
+			//ユーザ名が入力(部分一致)
+			if(userName.length()!=0) {
+				joiner.add(" name LIKE \'%" + userName + "%\'");
+			}
+			//生年月日が入力（指定範囲）
+			if(birthday1.length()!=0 && birthday2.length()!=0) {
+
+				joiner.add(" birth_date between \'" + birthday1 + "\' AND \'" + birthday2 + "\'");
+				System.out.println("test");
+				//下限のみ入力
+			}else if(birthday1.length()!=0) {
+				joiner.add(" birth_date between \'" + birthday1 + "\' AND \'99991231\'");
+				//上限のみ入力
+			}else if(birthday2.length()!=0) {
+				joiner.add(" birth_date between \'10000101\' AND \'" + birthday2 + "\'");
+			}
+
+			String sqlCommand = joiner.toString();
+			System.out.println(sqlCommand);
+			UserDao userDao = new UserDao();
+			List<User> userList = userDao.findSelect(sqlCommand);
+
+			// リクエストスコープにユーザ一覧情報をセット
+			request.setAttribute("userList", userList);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userlist.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 }

@@ -21,7 +21,7 @@
 			<a href="SignupServlet">新規登録</a><br>
 		</div>
 
-		<form action="/WebPrograming/" method="post">
+		<form action="UserListServlet" method="post">
 			<div class="Container">
 				<div class="tittle1">ログインID</div><div class="text1"><input type="text" class="size1" name="loginId"></div>
 				<div class="tittle2">ユーザ名</div><div class="text2"><input type="text" class="size1" name="userName"></div>
@@ -43,7 +43,6 @@
 					<td>${user.birthDate}</td>
 					<!-- ログインボタンの表示制御を行う -->
 					<c:choose>
-
 						<c:when test="${userInfo.loginId == 'admin'}">
 							<td>
 								<input type="button" onclick="location.href='UserDetailServlet?id=${user.id}'"value="詳細">
@@ -51,10 +50,15 @@
 								<input type="button" onclick="location.href='UserDeleteServlet?id=${user.id}'"value="削除">
 							</td>
 						</c:when>
-						<c:otherwise>
+						<c:when test="${userInfo.loginId == user.loginId}">
 							<td>
 								<input type="button" onclick="location.href='UserDetailServlet?id=${user.id}'"value="詳細">
 								<input type="button" onclick="location.href='UserUpdateServlet?id=${user.id}'"value="更新">
+							</td>
+						</c:when>
+						<c:otherwise>
+							<td>
+								<input type="button" onclick="location.href='UserDetailServlet?id=${user.id}'"value="詳細">
 							</td>
 						</c:otherwise>
 					</c:choose>
